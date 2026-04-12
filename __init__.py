@@ -17,7 +17,7 @@ def create_app():
     app = Flask(__name__)
     
     # Configuration
-    app.config["SECRET_KEY"] = secrets.token_urlsafe(16)
+    app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
     app.config["WTF_CSRF_ENABLED"] = True
     app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
     
