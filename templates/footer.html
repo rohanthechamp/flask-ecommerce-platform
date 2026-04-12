@@ -1,0 +1,173 @@
+
+
+<style>
+    /* --- OBSIDIAN FOOTER ARCHITECTURE --- */
+    .custom-footer {
+        background: var(--bg-obsidian);
+        border-top: 1px solid var(--glass-border);
+        color: var(--text-muted);
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Subtle background glow */
+    .custom-footer::before {
+        content: '';
+        position: absolute;
+        top: -150px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 600px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(168, 85, 247, 0.05) 0%, transparent 70%);
+        pointer-events: none;
+    }
+
+    .footer-brand-text {
+        color: white;
+        font-weight: 900;
+        letter-spacing: -1px;
+        font-size: 1.5rem;
+    }
+
+    .footer-link {
+        color: var(--text-muted);
+        text-decoration: none;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+        display: inline-block;
+    }
+
+    .footer-link:hover {
+        color: var(--neon-purple);
+        transform: translateX(5px);
+    }
+
+    /* Social Icons Styling */
+    .social-wrapper {
+        display: flex;
+        gap: 15px;
+    }
+
+    .social-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background: var(--bg-card);
+        border: 1px solid var(--glass-border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        text-decoration: none;
+    }
+
+    .social-btn:hover {
+        border-color: var(--neon-purple);
+        color: var(--neon-purple);
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(168, 85, 247, 0.2);
+    }
+
+    /* Newsletter Input Styling */
+    .footer-input {
+        background: var(--bg-input) !important;
+        border: 1px solid var(--glass-border) !important;
+        color: white !important;
+        border-radius: 10px !important;
+        padding: 10px 15px !important;
+        font-size: 0.85rem !important;
+    }
+
+    .footer-input:focus {
+        border-color: var(--neon-purple) !important;
+        box-shadow: none !important;
+    }
+
+    .btn-subscribe {
+        background: var(--accent-gradient);
+        border: none;
+        font-weight: 700;
+        border-radius: 10px;
+        padding: 8px 20px;
+        width: 100%;
+        margin-top: 10px;
+        transition: 0.3s;
+    }
+
+    .btn-subscribe:hover {
+        box-shadow: 0 0 20px rgba(236, 72, 153, 0.3);
+    }
+
+    .footer-bottom {
+        background: rgba(0, 0, 0, 0.3);
+        border-top: 1px solid var(--glass-border);
+    }
+</style>
+
+<footer class="custom-footer mt-5">
+    <div class="container py-5">
+        <div class="row g-5">
+            <div class="col-12 col-md-4">
+                <h5 class="footer-brand-text mb-3">ChampMart<span class="text-primary">.</span></h5>
+                <p class="small mb-4" style="max-width: 300px;">
+                    Next-generation marketplace for tactical hardware and software solutions. 
+                    Built for developers, by developers.
+                </p>
+                <div class="social-wrapper">
+                    <a href="#" class="social-btn"><i class="bi bi-twitter-x"></i></a>
+                    <a href="#" class="social-btn"><i class="bi bi-github"></i></a>
+                    <a href="#" class="social-btn"><i class="bi bi-linkedin"></i></a>
+                    <a href="#" class="social-btn"><i class="bi bi-discord"></i></a>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-2">
+                <h6 class="text-white fw-bold mb-4 small text-uppercase letter-spacing-1">Support</h6>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="#" class="footer-link">Logistics Center</a></li>
+                    <li class="mb-2"><a href="#" class="footer-link">Returns Policy</a></li>
+                    <li class="mb-2"><a href="#" class="footer-link">System Status</a></li>
+                    <li class="mb-2"><a href="#" class="footer-link">Track Signal</a></li>
+                </ul>
+            </div>
+
+            <div class="col-6 col-md-2">
+                <h6 class="text-white fw-bold mb-4 small text-uppercase letter-spacing-1">Company</h6>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="#" class="footer-link">The Mission</a></li>
+                    <li class="mb-2"><a href="#" class="footer-link">Changelog</a></li>
+                    <li class="mb-2"><a href="#" class="footer-link">Infrastructure</a></li>
+                    <li class="mb-2"><a href="#" class="footer-link">Legal Docs</a></li>
+                </ul>
+            </div>
+
+            <div class="col-12 col-md-4">
+                <div class="terminal-box p-4" style="background: rgba(255,255,255,0.03); border-radius: 20px; border: 1px solid var(--glass-border);">
+                    <h6 class="text-white fw-bold mb-3 small text-uppercase">Subscribe to Updates</h6>
+                    <p class="small mb-3">Get encrypted updates on new arrivals.</p>
+                    <form>
+                        <input type="email" class="form-control footer-input" placeholder="user@domain.com">
+                        <button type="submit" class="btn btn-primary btn-subscribe">Initialize Sync</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer-bottom py-4">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="small mb-0">© 2026 ChampMart Systems. Protocol: SECURE_V3</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <a href="#" class="footer-link small me-3">Privacy.md</a>
+                    <a href="#" class="footer-link small me-3">Terms.json</a>
+                    <a href="#" class="footer-link small">Contact.api</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>

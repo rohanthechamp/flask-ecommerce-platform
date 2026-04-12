@@ -1,0 +1,147 @@
+
+{% extends 'base.html' %}
+{% block title %}Explore Categories | ChampMart{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<style>
+  /* --- CATEGORY HUB LAYOUT --- */
+  .category-header {
+    margin-bottom: 4rem;
+    text-align: center;
+    animation: fadeInDown 0.8s ease-out;
+  }
+
+  .hub-title {
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: white;
+    letter-spacing: -2px;
+    margin-bottom: 10px;
+  }
+
+  .hub-subtitle {
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-size: 0.85rem;
+  }
+
+  /* The Grid */
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    perspective: 1000px;
+  }
+
+  /* Category Cards */
+  .category-tile {
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none !important;
+  }
+
+  .category-tile::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: var(--accent-gradient);
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 0;
+  }
+
+  .category-tile:hover {
+    transform: translateY(-10px) rotateX(5deg);
+    border-color: var(--neon-purple);
+    box-shadow: 0 15px 40px rgba(168, 85, 247, 0.2);
+  }
+
+  .category-tile:hover::before {
+    opacity: 0.05;
+  }
+
+  .category-icon {
+    font-size: 2rem;
+    color: var(--neon-purple);
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .category-name {
+    color: white;
+    font-weight: 800;
+    font-size: 1.25rem;
+    margin: 0;
+    position: relative;
+    z-index: 1;
+    letter-spacing: -0.5px;
+  }
+
+  .item-count-tag {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 0.65rem;
+    background: var(--bg-obsidian);
+    color: var(--text-muted);
+    padding: 4px 10px;
+    border-radius: 100px;
+    border: 1px solid var(--glass-border);
+  }
+
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  
+  <header class="category-header">
+    <h1 class="hub-title">Inventory Hub</h1>
+    <p class="hub-subtitle">Filter deployment by technical sector</p>
+  </header>
+
+  <div class="category-grid">
+    {% for category in list_of_category %}
+    <a href="{{ url_for('main.get_all_items', category=category) }}" class="category-tile">
+      <span class="item-count-tag">SECTOR_{{ loop.index }}</span>
+      
+      <div class="category-icon">
+        {# Dynamic Icons based on Category Name #}
+        {% if 'Phone' in category or 'Mobile' in category %}
+          <i class="fas fa-mobile-alt"></i>
+        {% elif 'Laptop' in category or 'Comp' in category %}
+          <i class="fas fa-laptop-code"></i>
+        {% elif 'Audio' in category or 'Head' in category %}
+          <i class="fas fa-headphones-alt"></i>
+        {% elif 'Watch' in category or 'Wear' in category %}
+          <i class="fas fa-stopwatch"></i>
+        {% else %}
+          <i class="fas fa-layer-group"></i>
+        {% endif %}
+      </div>
+
+      <h3 class="category-name">{{ category }}</h3>
+    </a>
+    {% endfor %}
+  </div>
+
+</div>
+{% endblock %}

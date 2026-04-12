@@ -1,0 +1,251 @@
+
+
+{% extends 'base.html' %}
+{% block title %}Inspect Item | ChampMart{% endblock %}
+
+{% block styles %}
+  {{ super() }}
+  <style>
+    /* --- PRODUCT PAGE ARCHITECTURE --- */
+    .product-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      background: var(--bg-card);
+      border: 1px solid var(--glass-border);
+      border-radius: 40px;
+      padding: 3rem;
+      margin-top: 2rem;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Left Side: The Showcase */
+    .image-section {
+      background: #000;
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      position: relative;
+    }
+
+    .product-image {
+      max-width: 100%;
+      height: auto;
+      filter: drop-shadow(0 0 30px rgba(168, 85, 247, 0.2));
+      transition: transform 0.5s ease;
+    }
+
+    .image-section:hover .product-image {
+      transform: scale(1.05) rotate(-2deg);
+    }
+
+    /* Right Side: The Data */
+    .category-label {
+      color: var(--neon-purple);
+      text-transform: uppercase;
+      font-weight: 800;
+      letter-spacing: 2px;
+      font-size: 0.8rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .product-title {
+      font-size: 3rem;
+      font-weight: 900;
+      letter-spacing: -2px;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      color: white;
+    }
+
+    .price-container {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 1.5rem;
+      border-radius: 20px;
+      border-left: 4px solid var(--neon-pink);
+      margin-bottom: 2rem;
+    }
+
+    .discount-price {
+      font-family: 'Sono', monospace;
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--neon-pink);
+    }
+
+    .original-price {
+      text-decoration: line-through;
+      color: var(--text-muted);
+      margin-left: 15px;
+      font-size: 1.2rem;
+    }
+
+    .discount-tag {
+      background: var(--accent-gradient);
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      margin-left: 10px;
+      vertical-align: middle;
+    }
+
+    .description {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: var(--text-muted);
+      margin-bottom: 2.5rem;
+    }
+
+    /* Interactive Buttons */
+    .btn-action-group {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 15px;
+      margin-bottom: 3rem;
+    }
+
+    .add-to-cart {
+      background: var(--accent-gradient);
+      border: none;
+      color: white;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 1.2rem;
+      border-radius: 15px;
+      transition: all 0.3s;
+    }
+
+    .add-to-cart:hover {
+      box-shadow: 0 0 30px rgba(236, 72, 153, 0.4);
+      transform: translateY(-3px);
+    }
+
+    /* Trust Badges */
+    .features {
+      border-top: 1px solid var(--glass-border);
+      padding-top: 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .feature-item i {
+      color: var(--neon-purple);
+      font-size: 1.1rem;
+    }
+
+    /* Search Header */
+    .search-query-header {
+      margin-bottom: 3rem;
+      text-align: center;
+    }
+
+    .query-text {
+      color: var(--neon-purple);
+      font-family: 'Sono', monospace;
+    }
+
+    @media (max-width: 992px) {
+      .product-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  {% if results %}
+    
+    {% if query %}
+    <div class="search-query-header">
+      <h2 class="text-white fw-900">Found Results for <span class="query-text">"{{ query }}"</span></h2>
+      <p class="text-muted">Displaying the most relevant tactical matches.</p>
+    </div>
+    {% endif %}
+
+    {% for item_data in results %}
+    <div class="product-grid mb-5">
+      <div class="image-section">
+        <img src="{{ item_data.product_img_url or url_for('static', filename='assets/img/default_p.png') }}"
+             alt="{{ item_data.product_name }}" class="product-image">
+      </div>
+
+      <div class="product-info d-flex flex-column justify-content-center">
+        <span class="category-label">{{ item_data.product_category }}</span>
+        <h1 class="product-title">{{ item_data.product_name }}</h1>
+
+        {% if current_user and current_user.id == 1 %}
+        <div class="mb-4">
+          <a class="btn btn-outline-primary btn-sm" href="{{ url_for('admin.edit_item', item_id=item_data.id) }}">
+            <i class="fas fa-edit me-2"></i> Administrative Override
+          </a>
+        </div>
+        {% endif %}
+
+        <div class="price-container">
+          <span class="discount-price">₹{{ item_data.discount_product_price }}</span>
+          <span class="original-price">₹{{ item_data.mrp_product_price }}</span>
+          {% set savings = ((item_data.mrp_product_price - item_data.discount_product_price) / item_data.mrp_product_price * 100)|round|int %}
+          <span class="discount-tag">-{{ savings }}%</span>
+        </div>
+
+        <p class="description">
+          {{ item_data.product_info }}
+        </p>
+
+        <div class="btn-action-group">
+          <button class="add-to-cart">
+            <i class="fas fa-shopping-cart me-2"></i> Deploy to Cart
+          </button>
+          <button class="btn btn-outline-light" style="border-radius: 15px;">
+            <i class="far fa-heart"></i>
+          </button>
+        </div>
+
+        <div class="features">
+          <div class="feature-item">
+            <i class="fas fa-bolt"></i>
+            <span>Instant Fulfillment</span>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-undo"></i>
+            <span>30-Day Sync Policy</span>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-shield-alt"></i>
+            <span>Secured Warranty</span>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-shipping-fast"></i>
+            <span>Carbon-Neutral Logistcs</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
+  {% else %}
+    <div class="text-center py-5 border border-secondary rounded-5 bg-dark">
+      <i class="fas fa-search-minus fa-4x text-muted mb-4"></i>
+      <h2 class="text-white fw-900">No Match Detected</h2>
+      <p class="text-muted">The query <span class="query-text">"{{ query }}"</span> returned no active inventory.</p>
+      <a href="{{ url_for('main.get_all_items') }}" class="btn btn-primary mt-3">Reset Search</a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

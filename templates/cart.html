@@ -1,0 +1,222 @@
+
+
+{% extends 'base.html' %}
+
+{% block title %}Session Buffer | ChampMart{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<style>
+  /* --- CART BUFFER ARCHITECTURE --- */
+  .cart-container {
+    background: var(--bg-obsidian);
+    min-height: 80vh;
+  }
+
+  .cart-item-card {
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    overflow: hidden;
+    transition: 0.3s ease;
+  }
+
+  .cart-item-card:hover {
+    border-color: var(--neon-purple);
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  /* Quantity Controller */
+  .qty-ctrl {
+    background: var(--bg-input);
+    border: 1px solid var(--glass-border);
+    border-radius: 50px;
+    padding: 5px 15px;
+    display: inline-flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .qty-btn {
+    background: transparent;
+    border: none;
+    color: var(--neon-purple);
+    font-weight: 900;
+    font-size: 1.2rem;
+    padding: 0;
+    line-height: 1;
+    transition: 0.2s;
+  }
+
+  .qty-btn:hover {
+    color: white;
+    transform: scale(1.2);
+  }
+
+  /* Summary Sidebar */
+  .summary-glass {
+    background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 2rem;
+    position: sticky;
+    top: 100px;
+  }
+
+  .price-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+  }
+
+  .total-divider {
+    border-top: 1px dashed var(--glass-border);
+    margin: 1.5rem 0;
+  }
+
+  .final-price {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: white;
+    font-family: 'Sono', monospace;
+  }
+
+  .btn-action {
+    border-radius: 12px;
+    padding: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.85rem;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="cart-container py-5">
+  <div class="container">
+    
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+        <div class="alert bg-dark border-primary text-primary animate__animated animate__fadeInDown" role="alert">
+          <i class="fas fa-info-circle me-2"></i> {{ message }}
+        </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <h1 class="h2 fw-900 text-white mb-5">Current Session Buffer</h1>
+
+    {% if cart_items %}
+    <div class="row g-4">
+      <div class="col-lg-8">
+        {% for item in cart_items %}
+        <div class="cart-item-card mb-4">
+          <div class="row g-0 align-items-center">
+            <div class="col-4 col-md-3">
+              <img src="{{ item.product.product_img_url or url_for('static', filename='assets/img/default_p.png') }}"
+                   class="img-fluid object-fit-cover w-100" style="height: 160px;" alt="{{ item.product.product_name }}">
+            </div>
+            <div class="col-8 col-md-9">
+              <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                  <h2 class="h5 fw-bold text-white mb-0">{{ item.product.product_name }}</h2>
+                  <form action="{{ url_for('main.remove_from_cart', item_id=item.product.id) }}" method="post">
+                    <button type="submit" class="btn text-danger btn-sm p-0 opacity-75 hover-opacity-100">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
+                  </form>
+                </div>
+
+                <div class="mb-3">
+                  <span class="text-muted text-decoration-line-through x-small me-2">₹{{ item.product.mrp_product_price }}</span>
+                  <span class="text-white fw-bold">₹{{ item.product.discount_product_price }}</span>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="qty-ctrl">
+                    {% if item.quantity == 1 %}
+                    <form action="{{ url_for('main.remove_from_cart', item_id=item.product.id) }}" method="post">
+                      <button type="submit" class="qty-btn"><i class="fas fa-minus-circle opacity-50"></i></button>
+                    </form>
+                    {% else %}
+                    <form action="{{ url_for('main.decreasing_item_quantity', item_id=item.product.id) }}" method="post">
+                      <button type="submit" class="qty-btn">-</button>
+                    </form>
+                    {% endif %}
+                    
+                    <span class="text-white fw-900 small">{{ item.quantity }}</span>
+
+                    <form action="{{ url_for('main.increasing_item_quantity', item_id=item.product.id) }}" method="post">
+                      <button type="submit" class="qty-btn">+</button>
+                    </form>
+                  </div>
+                  
+                  <div class="text-end">
+                    <span class="text-muted x-small d-block">Subtotal</span>
+                    <span class="text-primary fw-bold">₹{{ (item.product.discount_product_price * item.quantity) | round(2) }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="col-lg-4">
+        <div class="summary-glass">
+          <h3 class="h5 text-white fw-bold mb-4">Audit Summary</h3>
+          
+          <div class="price-row">
+            <span class="text-muted">Total Units</span>
+            <span class="text-white">{{ cart_items|length }}</span>
+          </div>
+          <div class="price-row">
+            <span class="text-muted">Net Value</span>
+            <span class="text-white">₹{{ subtotal_price }}</span>
+          </div>
+          <div class="price-row">
+            <span class="text-muted">Tax (18% GST)</span>
+            <span class="text-white">₹{{ (total_price * 0.18) | round(2) }}</span>
+          </div>
+
+          <div class="price-row text-success">
+            <span class="fw-bold">Discount Applied</span>
+            <span class="fw-bold">-₹{{ (subtotal_price - total_price) | round(2) }}</span>
+          </div>
+
+          <div class="total-divider"></div>
+
+          <div class="mb-4">
+            <span class="text-muted small text-uppercase">Final Commitment</span>
+            <div class="final-price">₹{{ (total_price + (total_price * 0.18)) | round(2) }}</div>
+          </div>
+
+          <div class="d-grid gap-3">
+            <a href="{{ url_for('main.checkout_page')}}" class="btn btn-primary btn-action shadow-lg">
+              <i class="fas fa-shield-alt me-2"></i> Proceed to Checkout
+            </a>
+            <a href="{{ url_for('main.remove_all_items_from_cart')}}" class="btn btn-outline-danger btn-action">
+              <i class="fas fa-broom me-2"></i> Purge Buffer
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+      <div class="checkout-card p-5" style="border: 1px dashed var(--glass-border); border-radius: 30px;">
+        <i class="fas fa-shopping-basket fa-4 circle-icon mb-4 opacity-25"></i>
+        <h3 class="text-white">Buffer Empty</h3>
+        <p class="text-muted mb-4">Your current session has no active assets.</p>
+        <a href="{{ url_for('main.get_all_items') }}" class="btn btn-primary rounded-pill px-5">Re-index Store</a>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact Support | ChampMart{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<style>
+  /* --- CONTACT TERMINAL ARCHITECTURE --- */
+  .contact-header {
+    padding: 5rem 0 3rem;
+    text-align: center;
+    background: radial-gradient(circle at center, rgba(168, 85, 247, 0.1) 0%, transparent 70%);
+  }
+
+  .contact-title {
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: white;
+    letter-spacing: -2px;
+    margin-bottom: 1rem;
+  }
+
+  .contact-subtitle {
+    color: var(--neon-purple);
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  .terminal-form-card {
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    border-radius: 30px;
+    padding: 3rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Form Styling Overrides */
+  .form-group-custom {
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+
+  .form-label-custom {
+    display: block;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+
+  .form-control-terminal {
+    background: var(--bg-input) !important;
+    border: 1px solid var(--glass-border) !important;
+    color: white !important;
+    border-radius: 12px !important;
+    padding: 12px 15px !important;
+    transition: all 0.3s;
+  }
+
+  .form-control-terminal:focus {
+    border-color: var(--neon-purple) !important;
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.2) !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+  }
+
+  .btn-send {
+    background: var(--accent-gradient);
+    border: none;
+    color: white;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 15px;
+    border-radius: 12px;
+    width: 100%;
+    transition: all 0.4s;
+    margin-top: 1rem;
+  }
+
+  .btn-send:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(236, 72, 153, 0.4);
+  }
+
+  /* Success State */
+  .success-banner {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid #10b981;
+    color: #10b981;
+    padding: 2rem;
+    border-radius: 20px;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<main class="container py-5">
+
+  <header class="contact-header">
+    {% if msg_sent %}
+    <div class="success-banner animate__animated animate__fadeIn">
+      <i class="fas fa-check-circle fa-3x mb-3"></i>
+      <h1 class="h3 fw-bold">Transmission Received</h1>
+      <p class="mb-0">Your signal has been successfully routed to our support node.</p>
+    </div>
+    {% else %}
+    <p class="contact-subtitle">Communication Protocol</p>
+    <h1 class="contact-title">Open a Ticket</h1>
+    <p class="text-muted mx-auto" style="max-width: 500px;">
+      Encountering a bug or need technical clearance? Send a prioritized message to our engineering team.
+    </p>
+    {% endif %}
+  </header>
+
+  <div class="row justify-content-center">
+    <div class="col-lg-7">
+      <div class="terminal-form-card">
+        <form id="contactForm" action="{{ url_for('main.contact') }}" method="post">
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group-custom">
+                <label class="form-label-custom">Identity Name</label>
+                <input class="form-control form-control-terminal" name="name" type="text" placeholder="John Doe"
+                  required />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group-custom">
+                <label class="form-label-custom">Return Path (Email)</label>
+                <input class="form-control form-control-terminal" name="email" type="email" placeholder="dev@domain.com"
+                  required />
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group-custom">
+            <label class="form-label-custom">Contact Reference (Phone)</label>
+            <input class="form-control form-control-terminal" name="phone" type="tel" placeholder="+91 XXXX-XXXXXX"
+              required />
+          </div>
+
+          <div class="form-group-custom">
+            <label class="form-label-custom">Payload Message</label>
+            <textarea class="form-control form-control-terminal" name="message" required style="height: 10rem"
+              placeholder="Enter your query..."></textarea>
+          </div>
+
+          <button class="btn-send" id="submitButton" type="submit">
+            <i class="fas fa-paper-plane me-2"></i> Execute Send
+          </button>
+        </form>
+      </div>
+
+      <div class="row mt-5 text-center text-muted">
+        <div class="col-4">
+          <i class="fas fa-terminal d-block mb-2"></i>
+          <span class="small">SSH Support</span>
+        </div>
+        <div class="col-4">
+          <i class="fas fa-encrypted d-block mb-2"></i>
+          <span class="small">End-to-End</span>
+        </div>
+        <div class="col-4">
+          <i class="fas fa-bolt d-block mb-2"></i>
+          <span class="small">Fast Response</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}

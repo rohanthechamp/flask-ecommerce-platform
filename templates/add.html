@@ -1,0 +1,61 @@
+
+{% extends 'base.html' %}
+{% from "bootstrap5/form.html" import render_form %}
+{% block title %}Add Products{% endblock %}
+{% block content %}
+
+<main class="flex-grow-1">
+    <div class="container py-5">
+        <!-- Header Section -->
+        <div class="page-heading">
+            {% if is_edit %}
+            <h1>Update item</h1>
+            {% else %}
+            <h1>New Item</h1>
+            {% endif %}
+            <span class="subheading">You're going to add great products!</span>
+        </div>
+        <section class="row justify-content-center mb-5 animate-header">
+            <div class="col-lg-8 text-center">
+                <h1 class="display-4 fw-bold mb-3">Add Your Favorite Item</h1>
+                <p class="lead text-muted">Share amazing workspaces with our community</p>
+            </div>
+        </section>
+
+        <!-- Main Content Section -->
+        <section class="row justify-content-center">
+            <div class="col-lg-10">
+                <!-- Image Container -->
+                <div class="image-container mb-5">
+                    <img src="{{ url_for('static', filename='assets/img/add.jpg') }}" class="hero-image" alt="Inventory">
+                    <!-- Ensure the image file exists at the specified path -->
+                    <!-- If the image file does not exist, place it in the correct location or update the path -->
+                </div>
+
+                <!-- Form Card -->
+                <div class="card">
+                    <div class="card-body p-4 p-md-5">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-10">
+                                {{ form.hidden_tag() }}
+                                {{ render_form(form, button_map={'submit': 'primary btn-lg w-100'}, novalidate=True) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Success Message -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }} mt-4 text-center" role="alert">
+                    {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+            </div>
+        </section>
+    </div>
+</main>
+{% endblock %}

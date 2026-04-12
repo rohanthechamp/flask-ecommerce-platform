@@ -1,0 +1,325 @@
+{% extends 'base.html' %}
+
+{% block title %}Marketplace | ChampMart{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<style>
+  /* --- PAGE-SPECIFIC OBSIDIAN OVERRIDES --- */
+  .main-container {
+    padding-top: 2rem;
+  }
+
+  /* --- COMPACT DISCOVERY HEADER --- */
+  .hero-header {
+    background: linear-gradient(90deg, rgba(168, 85, 247, 0.1) 0%, rgba(236, 72, 153, 0.05) 100%);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 3rem 2rem;
+    margin-bottom: 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-title {
+    font-weight: 900;
+    font-size: 2.5rem;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
+  }
+
+  /* --- NEON SEARCH BAR --- */
+  .search-container {
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    border-radius: 100px;
+    padding: 6px;
+    transition: all 0.3s ease;
+  }
+
+  .search-container:focus-within {
+    border-color: var(--neon-purple);
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
+  }
+
+  .search-container input {
+    background: transparent !important;
+    border: none !important;
+    color: white !important;
+    padding-left: 20px;
+    box-shadow: none !important;
+  }
+
+  .search-container .btn-primary {
+    border-radius: 100px;
+    padding: 10px 25px;
+  }
+
+  /* --- THE OBSIDIAN SIDEBAR --- */
+  .category-sidebar {
+    background: var(--bg-card) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 20px;
+    position: sticky;
+    top: 100px;
+  }
+
+  .category-sidebar h4 {
+    color: var(--text-main);
+    font-weight: 800;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid var(--glass-border) !important;
+  }
+
+  .category-item {
+    padding: 12px 15px;
+    border-radius: 12px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 5px;
+  }
+
+  .category-item i {
+    color: var(--neon-purple);
+    width: 20px;
+    text-align: center;
+  }
+
+  .category-item a {
+    color: var(--text-muted) !important;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .category-item:hover {
+    background: rgba(168, 85, 247, 0.1);
+  }
+
+  .category-item:hover a {
+    color: white !important;
+  }
+
+  /* --- PRODUCT GRID & CARDS --- */
+  .product-card {
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    transition: transform 0.3s, border-color 0.3s;
+    height: 100%;
+  }
+
+  .product-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--neon-pink);
+  }
+
+  .product-img-container {
+    height: 200px;
+    background: #000;
+    border-bottom: 1px solid var(--glass-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .product-img-container img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transition: transform 0.5s;
+  }
+
+  .product-card:hover .product-img-container img {
+    transform: scale(1.1);
+  }
+
+  .price-mrp {
+    text-decoration: line-through;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+
+  .price-discount {
+    color: var(--neon-pink);
+    font-weight: 800;
+    font-size: 1.2rem;
+    font-family: 'Sono', monospace;
+  }
+
+  /* --- NEON PAGINATION --- */
+  .pagination .page-link {
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    color: var(--text-muted);
+    margin: 0 5px;
+    border-radius: 8px;
+    font-weight: 700;
+  }
+
+  .pagination .page-item.active .page-link {
+    background: var(--accent-gradient);
+    border-color: transparent;
+    color: white;
+  }
+
+  .pagination .page-link:hover {
+    background: var(--bg-input);
+    color: white;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container main-container">
+
+  <header class="hero-header text-center">
+    <h1 class="hero-title">The Discovery Market</h1>
+    <p class="text-muted">High-performance gear for the modern era.</p>
+  </header>
+
+  <div class="row justify-content-center mb-5">
+    <div class="col-md-7">
+      <div class="search-container shadow-lg">
+        <form method="POST" action="/search" class="d-flex align-items-center">
+          {{ form.hidden_tag() }}
+          <div class="flex-grow-1">
+            {{ form.query(class="form-control", placeholder="Search products, brands, tech...") }}
+          </div>
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-search me-2"></i> Find
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <aside class="col-md-3 mb-4">
+      <div class="category-sidebar p-4 shadow-sm">
+        <h4 class="mb-4">Collections</h4>
+
+        <div class="category-item">
+          <i class="fas fa-th-large"></i>
+          <a href="{{ url_for('main.show_category', category_name='all') }}" class="text-decoration-none">All Drops</a>
+        </div>
+
+        {% set cats = [
+        ('Electronics', 'fas fa-microchip'),
+        ('Home & Kitchen', 'fas fa-couch'),
+        ('Fashion', 'fas fa-vest'),
+        ('Grocery', 'fas fa-leaf'),
+        ('Beauty', 'fas fa-sparkles'),
+        ('Books', 'fas fa-scroll'),
+        ('Sports & Outdoors', 'fas fa-mountain'),
+        ('Toys & Games', 'fas fa-gamepad'),
+        ('Health', 'fas fa-activity')
+        ] %}
+
+        {% for name, icon in cats %}
+        <div class="category-item">
+          <i class="{{ icon }}"></i>
+          <a href="{{ url_for('main.show_category', category_name=name) }}" class="text-decoration-none">{{ name }}</a>
+        </div>
+        {% endfor %}
+
+        {% if current_user and current_user.id == 1 %}
+        <div class="mt-5 pt-3 border-top border-secondary">
+          <a href="{{ url_for('admin.add_item') }}" class="btn btn-outline-primary w-100 py-2">
+            <i class="fas fa-plus-circle me-2"></i> Inventory+
+          </a>
+        </div>
+        {% endif %}
+      </div>
+    </aside>
+
+    <main class="col-md-9">
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% if not all_items %}
+        <div class="col-12">
+          <div class="alert bg-dark text-center border-secondary py-5">
+            <i class="fas fa-satellite-dish fa-3x mb-3 text-muted"></i>
+            <h5 class="text-white">Zero Signals Detected</h5>
+            <p class="text-muted">No products found in this sector.</p>
+          </div>
+        </div>
+        {% endif %}
+
+        {% for item in all_items %}
+        <div class="col">
+          <div class="card product-card shadow-sm">
+        
+
+               <div class="product-img-container">
+              <img
+                src="{{ item.product_img_url if item.product_img_url and item.product_img_url != 'None' else url_for('static', filename='static/assets/img/product_d.png') }}"
+                class="card-img-top" alt="{{ item.product_name }}"
+                onerror="this.onerror=null;this.src='/static/assets/img/product_d.png';">
+            </div>
+            <div class="card-body">
+              <h3 class="card-title text-white fs-6 mb-3" style="height: 40px; overflow: hidden;">{{ item.product_name
+                }}</h3>
+
+              <div class="mb-3">
+                <span class="price-mrp d-block">₹{{ item.mrp_product_price }}</span>
+                <span class="price-discount">₹{{ item.discount_product_price }}</span>
+              </div>
+
+              <div class="d-grid gap-2">
+                <a href="{{ url_for('main.show_item', item_id=item.id) }}" class="btn btn-outline-primary btn-sm">
+                  <i class="fas fa-expand-alt me-2"></i> Inspect
+                </a>
+
+                {% if current_user and current_user.id == 1 %}
+                <a href="{{ url_for('admin.delete_item', item_id=item.id) }}" class="btn btn-outline-danger btn-sm">
+                  <i class="fas fa-trash-alt"></i>
+                </a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      {% if all_items %}
+      <nav class="mt-5">
+        <ul class="pagination justify-content-center">
+          {% if page > 1 %}
+          <li class="page-item">
+            <a class="page-link" href="{{ url_for('main.get_all_items', page=page-1) }}">
+              <i class="fas fa-chevron-left"></i>
+            </a>
+          </li>
+          {% endif %}
+
+          {% set total_pages = (total // per_page) + (1 if total % per_page > 0 else 0) %}
+          {% for p in range(1, total_pages + 1) %}
+          {% if p <= 5 or p==total_pages or (p>= page - 1 and p <= page + 1) %} <li
+              class="page-item {% if p == page %}active{% endif %}">
+              <a class="page-link" href="{{ url_for('main.get_all_items', page=p) }}">{{ p }}</a>
+              </li>
+              {% elif p == 6 and total_pages > 7 %}
+              <li class="page-item disabled"><span class="page-link">...</span></li>
+              {% endif %}
+              {% endfor %}
+
+              {% if page < total_pages %} <li class="page-item">
+                <a class="page-link" href="{{ url_for('main.get_all_items', page=page+1) }}">
+                  <i class="fas fa-chevron-right"></i>
+                </a>
+                </li>
+                {% endif %}
+        </ul>
+      </nav>
+      {% endif %}
+    </main>
+  </div>
+</div>
+{% endblock %}

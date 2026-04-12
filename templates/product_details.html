@@ -1,0 +1,267 @@
+
+
+{% extends 'base.html' %}
+{% block title %}{{ item_data.product_name }} | ChampMart{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<style>
+  /* --- DETAIL VIEW ARCHITECTURE --- */
+  .product-container {
+    padding: 4rem 0;
+    animation: fadeIn 0.8s ease-out;
+  }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  /* Left Side: Media Showcase */
+  .image-section {
+    position: sticky;
+    top: 100px;
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    border-radius: 40px;
+    padding: 3rem;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .product-image {
+    max-width: 100%;
+    height: auto;
+    filter: drop-shadow(0 20px 50px rgba(0,0,0,0.5));
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .image-section:hover .product-image {
+    transform: scale(1.08) rotate(-1deg);
+  }
+
+  /* Right Side: Information Hub */
+  .category-pill {
+    display: inline-block;
+    color: var(--neon-purple);
+    text-transform: uppercase;
+    font-weight: 800;
+    letter-spacing: 2px;
+    font-size: 0.75rem;
+    margin-bottom: 1rem;
+    padding: 4px 12px;
+    background: rgba(168, 85, 247, 0.1);
+    border-radius: 100px;
+  }
+
+  .product-title {
+    font-size: 3.5rem;
+    font-weight: 900;
+    letter-spacing: -2px;
+    color: white;
+    line-height: 1;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Price Layout */
+  .price-vault {
+    background: var(--bg-obsidian);
+    border: 1px solid var(--glass-border);
+    padding: 1.5rem;
+    border-radius: 20px;
+    margin-bottom: 2rem;
+  }
+
+  .mrp-text {
+    color: var(--text-muted);
+    text-decoration: line-through;
+    font-size: 1.1rem;
+    font-family: 'Sono', monospace;
+  }
+
+  .deal-text {
+    color: var(--neon-pink);
+    font-size: 2.5rem;
+    font-weight: 800;
+    font-family: 'Sono', monospace;
+  }
+
+  .savings-badge {
+    background: var(--accent-gradient);
+    color: white;
+    font-weight: 900;
+    padding: 5px 15px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    margin-left: 1rem;
+  }
+
+  /* Action Section */
+  .action-hub {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+
+  .btn-deploy {
+    flex: 2;
+    padding: 1.2rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    border-radius: 16px;
+    background: var(--accent-gradient);
+    border: none;
+    transition: 0.3s;
+  }
+
+  .btn-deploy:hover {
+    box-shadow: 0 0 30px rgba(236, 72, 153, 0.4);
+    transform: translateY(-3px);
+  }
+
+  .btn-wishlist {
+    flex: 0.5;
+    border-radius: 16px;
+    border: 1px solid var(--glass-border);
+    background: var(--bg-card);
+    color: white;
+    transition: 0.3s;
+  }
+
+  .btn-wishlist.active {
+    border-color: #ef4444;
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+  }
+
+  /* Feature Grid */
+  .feature-terminal {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--glass-border);
+  }
+
+  .terminal-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+
+  .terminal-item i {
+    color: var(--neon-purple);
+  }
+
+  @media (max-width: 992px) {
+    .product-grid { grid-template-columns: 1fr; }
+    .image-section { position: relative; top: 0; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container product-container">
+  
+  {% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+      {% for category, message in messages %}
+      <div class="alert alert-{{ category }} bg-dark border-{{ category }} text-white alert-dismissible fade show mb-4 rounded-4" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
+      </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <div class="product-grid">
+    <div class="product-img-container">
+              <img
+                src="{{ item_data.product_img_url if item_data.product_img_url and item_data.product_img_url != 'None' else url_for('static', filename='static/assets/img/product_d.png') }}"
+                class="card-img-top" alt="{{ item_data.product_name }}"
+                onerror="this.onerror=null;this.src='/static/assets/img/product_d.png';">
+            </div>
+    
+
+    <div class="product-info">
+      <span class="category-pill">{{ item_data.product_category }}</span>
+      <h1 class="product-title">{{ item_data.product_name }}</h1>
+
+      {% if current_user.id == 1 %}
+      <div class="mb-4">
+        <a class="btn btn-outline-primary btn-sm rounded-pill px-4" href="{{ url_for('admin.edit_item', item_id=item_data.id) }}">
+          <i class="fas fa-terminal me-2"></i> Edit Metadata
+        </a>
+      </div>
+      {% endif %}
+
+      <div class="price-vault d-flex align-items-center justify-content-between">
+        <div>
+          <span class="mrp-text">₹{{ item_data.mrp_product_price }}</span><br>
+          <span class="deal-text">₹{{ item_data.discount_product_price }}</span>
+        </div>
+        {% set savings = (((item_data.mrp_product_price - item_data.discount_product_price) / item_data.mrp_product_price) * 100) | round | int %}
+        <div class="savings-badge">
+          SAVE {{ savings }}%
+        </div>
+      </div>
+
+      <p class="description">
+        {{ item_data.product_info }}
+      </p>
+
+      <div class="action-hub">
+        <form action="{{ url_for('main.add_to_cart', item_id=item_data.id) }}" method="post" class="flex-grow-1">
+          <button type="submit" class="btn btn-primary btn-deploy w-100">
+            <i class="fas fa-shopping-cart me-2"></i> Deploy to Cart
+          </button>
+        </form>
+
+        <form action="{{ url_for('main.add_products_wishlist', item_id=item_data.id) }}" method="post">
+          <button type="submit" 
+                  class="btn btn-wishlist h-100 {% if in_wishlist_check %}active{% endif %}"
+                  data-bs-toggle="tooltip" 
+                  title="{% if in_wishlist_check %}Item in Vault{% else %}Add to Vault{% endif %}"
+                  {% if in_wishlist_check %}disabled{% endif %}>
+            <i class="fa{% if in_wishlist_check %}s{% else %}r{% endif %} fa-heart"></i>
+          </button>
+        </form>
+      </div>
+
+      <div class="feature-terminal">
+        <div class="terminal-item">
+          <i class="fas fa-shipping-fast"></i>
+          <span>Express Logistics</span>
+        </div>
+        <div class="terminal-item">
+          <i class="fas fa-sync-alt"></i>
+          <span>30-Day Sync Policy</span>
+        </div>
+        <div class="terminal-item">
+          <i class="fas fa-fingerprint"></i>
+          <span>Secure Warranty</span>
+        </div>
+        <div class="terminal-item">
+          <i class="fas fa-box"></i>
+          <span>Tactical Packaging</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Initialize Tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+  });
+</script>
+{% endblock %}

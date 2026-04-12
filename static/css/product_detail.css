@@ -1,0 +1,175 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Product container layout */
+  .product-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .product-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  
+  @media (min-width: 668px) {
+    .product-grid {
+      grid-template-columns: minmax(300px, 1fr) 1.5fr;
+      align-items: start;
+    }
+  }
+  
+  /* Enhanced Image section styling */
+  .image-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    height: 400px; /* Fixed height for consistent display */
+    width: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  }
+  
+  /* ENHANCED: Product image styling with strong fit properties */
+  .product-image.product-card {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Ensures image fits while maintaining aspect ratio */object-position: center;
+    /* Centers the image within the container */transition: transform 0.3s ease;
+    padding: 15px;
+    /* Provides some padding around the image */display: block;
+    background-color: #ffffff;
+     /* Clean background for transparent images */  :;
+    -webkit-transition: transform 0.3s ease;
+    -moz-transition: transform 0.3s ease;
+    -ms-transition: transform 0.3s ease;
+    -o-transition: transform 0.3s ease;
+}
+  
+  /* Force image to respect container dimensions */
+  img.product-image.product-card {
+    max-width: 100% !important;
+    max-height: 100% !important;
+    min-height: 0 !important; /* Prevents image from forcing minimum height */
+    min-width: 0 !important; /* Prevents image from forcing minimum width */
+  }
+  
+  /* Hover effect */
+  .image-section:hover .product-image.product-card {
+    transform: scale(1.05);
+  }
+  
+  /* For high-resolution displays */
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .image-section {
+      background-image: none; /* Remove any background for clarity */
+    }
+    
+    .product-image.product-card {
+      image-rendering: -webkit-optimize-contrast; /* Sharper images on high-res screens */
+    }
+  }
+  
+  /* Product info section */
+  .product-info {
+    padding: 15px 0;
+  }
+  
+  .category {
+    font-size: 0.9rem;
+    color: #6c757d;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  
+  .product-title {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    font-weight: 600;
+  }
+  
+  .description {
+    color: #212529;
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+  
+  /* Feature items */
+  .features {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 20px;
+  }
+  
+  .feature-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+    color: #495057;
+  }
+  
+  .feature-item i {
+    color: #0d6efd;
+    width: 20px;
+    text-align: center;
+  }
+  
+  /* Enhanced responsive adjustments */
+  @media (max-width: 768px) {
+    .image-section {
+      height: 350px;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .image-section {
+      height: 300px;
+    }
+    
+    .product-title {
+      font-size: 1.5rem;
+    }
+  }
+  
+  /* Very small screens */
+  @media (max-width: 320px) {
+    .image-section {
+      height: 250px;
+    }
+  }
+  
+  /* Fallback for older browsers that might not support object-fit */
+  @supports not (object-fit: contain) {
+    .image-section {
+      position: relative;
+    }
+    
+    .product-image.product-card {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      max-width: 90%;
+      max-height: 90%;
+      width: auto;
+      height: auto;
+    }
+    
+    .image-section:hover .product-image.product-card {
+      transform: translate(-50%, -50%) scale(1.05);
+    }
+  }

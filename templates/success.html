@@ -1,0 +1,149 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Order Confirmed | ChampMart{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<style>
+  /* --- SUCCESS ANIMATION & LAYOUT --- */
+  .payment-success-wrapper {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 1000px;
+  }
+
+  .success-card {
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    padding: 3rem;
+    border-radius: 40px;
+    text-align: center;
+    max-width: 550px;
+    width: 100%;
+    position: relative;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    animation: slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* The Glowing Success Icon */
+  .success-icon-circle {
+    width: 100px;
+    height: 100px;
+    background: rgba(34, 197, 94, 0.1);
+    border: 2px solid #22c55e;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 2rem;
+    position: relative;
+    box-shadow: 0 0 30px rgba(34, 197, 94, 0.2);
+  }
+
+  .success-icon-circle i {
+    font-size: 2.5rem;
+    color: #22c55e;
+    animation: checkmarkGrow 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s both;
+  }
+
+  /* Radial glow behind card */
+  .success-card::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120%;
+    height: 120%;
+    background: radial-gradient(circle, rgba(34, 197, 94, 0.05) 0%, transparent 70%);
+    z-index: -1;
+  }
+
+  .success-title {
+    font-weight: 900;
+    font-size: 2.5rem;
+    letter-spacing: -1px;
+    margin-bottom: 1rem;
+    color: white;
+  }
+
+  .success-text {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+  }
+
+  .order-number-pill {
+    background: var(--bg-obsidian);
+    border: 1px solid var(--glass-border);
+    padding: 10px 20px;
+    border-radius: 12px;
+    display: inline-block;
+    font-family: 'Sono', monospace;
+    font-size: 0.9rem;
+    color: var(--neon-purple);
+    margin-bottom: 2rem;
+  }
+
+  /* --- ANIMATIONS --- */
+  @keyframes slideUpFade {
+    from { opacity: 0; transform: translateY(40px) rotateX(-10deg); }
+    to { opacity: 1; transform: translateY(0) rotateX(0); }
+  }
+
+  @keyframes checkmarkGrow {
+    from { transform: scale(0); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  /* Confetti-like pulse */
+  .pulse-ring {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2px solid #22c55e;
+    animation: pulseOut 2s infinite;
+  }
+
+  @keyframes pulseOut {
+    0% { transform: scale(1); opacity: 0.5; }
+    100% { transform: scale(1.5); opacity: 0; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container payment-success-wrapper">
+  <div class="success-card">
+    <div class="success-icon-circle">
+      <div class="pulse-ring"></div>
+      <i class="fas fa-check"></i>
+    </div>
+
+    <h1 class="success-title">Mission Accomplished.</h1>
+    
+    <div class="order-number-pill">
+      STATUS: TRANSACTION_SUCCESSFUL // SIGNAL_RECEIVED
+    </div>
+
+    <p class="success-text">
+      Your payment has been decrypted and processed. Your gear is currently being prepared for deployment. 
+      Check your dashboard for real-time tracking updates.
+    </p>
+
+    <div class="d-grid gap-3">
+      <a href="{{ url_for('main.home_page') }}" class="btn btn-primary btn-lg py-3">
+        <i class="fas fa-shopping-bag me-2"></i> Continue Shopping
+      </a>
+      <a href="{{ url_for('main.get_all_items') }}" class="btn btn-outline-light py-2">
+        View Order History
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

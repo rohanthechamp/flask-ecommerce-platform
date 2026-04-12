@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Sono:wght@400;700&display=swap" rel="stylesheet" />
+
+ 
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+
+
+  <style>
+
+    :root {
+
+      --bg-obsidian: #0b0e14;
+
+      --bg-card: #161a23;
+
+      --bg-input: #212631;
+
+      --neon-purple: #a855f7;
+
+      --neon-pink: #ec4899;
+
+      --text-main: #ffffff;
+
+      --text-muted: #8a94a6;
+
+      --glass-border: rgba(255, 255, 255, 0.08);
+
+      --accent-gradient: linear-gradient(135deg, var(--neon-purple) 0%, var(--neon-pink) 100%);
+
+    }
+
+
+
+    body {
+
+      background-color: var(--bg-obsidian);
+
+      color: var(--text-main);
+
+      font-family: 'Inter', sans-serif;
+
+      overflow-x: hidden;
+
+    }
+
+
+
+    /* --- GLASSMORPHIC NAVBAR --- */
+
+    .navbar {
+
+      background: rgba(11, 14, 20, 0.8) !important;
+
+      backdrop-filter: blur(12px);
+
+      border-bottom: 1px solid var(--glass-border);
+
+      padding: 1rem 0;
+
+    }
+
+
+
+    .navbar-brand {
+
+      background: var(--accent-gradient);
+
+      -webkit-background-clip: text;
+
+      -webkit-text-fill-color: transparent;
+
+      font-size: 1.5rem;
+
+      letter-spacing: -1px;
+
+    }
+
+
+
+    .nav-link {
+
+      color: var(--text-muted) !important;
+
+      font-weight: 600;
+
+      font-size: 0.9rem;
+
+      transition: all 0.3s ease;
+
+      padding: 0.5rem 1rem !important;
+
+    }
+
+
+
+    .nav-link:hover, .nav-link.active {
+
+      color: var(--text-main) !important;
+
+      transform: translateY(-1px);
+
+    }
+
+
+
+    .nav-link i {
+
+      color: var(--neon-purple);
+
+      font-size: 1.1rem;
+
+    }
+
+
+
+    /* --- NEON BADGE --- */
+
+    .badge.bg-danger {
+
+      background: var(--accent-gradient) !important;
+
+      box-shadow: 0 0 15px rgba(236, 72, 153, 0.4);
+
+      border: none;
+
+      font-weight: 800;
+
+    }
+
+
+
+    /* --- PROFILE DROPDOWN --- */
+
+    .dropdown-menu {
+
+      background-color: var(--bg-card);
+
+      border: 1px solid var(--glass-border);
+
+      border-radius: 16px;
+
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+
+      margin-top: 15px;
+
+    }
+
+
+
+    .dropdown-item {
+
+      color: var(--text-muted);
+
+      padding: 0.7rem 1.2rem;
+
+      font-weight: 500;
+
+      transition: all 0.2s;
+
+    }
+
+
+
+    .dropdown-item:hover {
+
+      background-color: var(--bg-input);
+
+      color: var(--text-main);
+
+    }
+
+
+
+    .dropdown-item i {
+
+      width: 20px;
+
+    }
+
+
+
+    .dropdown-divider {
+
+      border-top: 1px solid var(--glass-border);
+
+    }
+
+
+
+    /* --- BUTTONS --- */
+
+    .btn-primary {
+
+      background: var(--accent-gradient);
+
+      border: none;
+
+      font-weight: 700;
+
+      padding: 0.6rem 1.5rem;
+
+      border-radius: 10px;
+
+      box-shadow: 0 4px 15px rgba(168, 85, 247, 0.2);
+
+    }
+
+
+
+    .btn-outline-primary {
+
+      border: 2px solid var(--neon-purple);
+
+      color: var(--neon-purple);
+
+      font-weight: 700;
+
+      border-radius: 10px;
+
+    }
+
+
+
+    .btn-outline-primary:hover {
+
+      background: var(--accent-gradient);
+
+      border-color: transparent;
+
+    }
+
+
+
+    /* --- ANIMATIONS --- */
+
+    .animate.slideIn {
+
+      animation-duration: 0.3s;
+
+      animation-fill-mode: both;
+
+      animation-name: slideIn;
+
+    }
+
+
+
+    @keyframes slideIn {
+
+      0% { transform: translateY(1rem); opacity: 0; }
+
+      100% { transform: translateY(0rem); opacity: 1; }
+
+    }
+
+  </style>
+
+
+
+  {% block styles %}{% endblock %}
+
+  <title>{% block title %}ChampMart | Premium E-Commerce{% endblock %}</title>
+
+</head>
+
+
+
+<body>
+
+  <nav class="navbar navbar-expand-lg sticky-top">
+
+    <div class="container">
+
+      <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="{{ url_for('main.home_page') }}">
+
+        <i class="fas fa-bolt"></i>
+
+        <span>ChampMart</span>
+
+      </a>
+
+
+
+      <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+
+        <i class="fas fa-bars text-white"></i>
+
+      </button>
+
+
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+
+        <ul class="navbar-nav me-auto">
+
+          <li class="nav-item">
+
+            <a class="nav-link d-flex align-items-center gap-2" href="{{ url_for('main.home_page') }}">
+
+              <i class="fas fa-layer-group"></i>
+
+              <span>Discovery</span>
+
+            </a>
+
+          </li>
+
+          <li class="nav-item">
+
+            <a class="nav-link d-flex align-items-center gap-2" href="{{ url_for('main.get_all_items', page=p) }}">
+
+              <i class="fas fa-shopping-bag"></i>
+
+              <span>Market</span>
+
+            </a>
+
+          </li>
+
+          <li class="nav-item">
+
+            <a class="nav-link d-flex align-items-center gap-2" href="{{ url_for('main.process_orders') }}">
+
+              <i class="fas fa-receipt"></i>
+
+              <span>Orders</span>
+
+            </a>
+
+          </li>
+
+          <li class="nav-item">
+
+            <a class="nav-link d-flex align-items-center gap-2 position-relative" href="{{ url_for('main.redirect_to_cart') }}">
+
+              <i class="fas fa-shopping-cart"></i>
+
+              <span>Cart</span>
+
+              {% if user_cart_items|length > 0 %}
+
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+
+                {{ user_cart_items|length }}
+
+              </span>
+
+              {% endif %}
+
+            </a>
+
+          </li>
+
+          <li class="nav-item">
+
+            <a class="nav-link d-flex align-items-center gap-2" href="{{ url_for('main.wishlist_page') }}">
+
+              <i class="fas fa-heart"></i>
+
+              <span>Saved</span>
+
+            </a>
+
+          </li>
+
+        </ul>
+
+
+
+        <ul class="navbar-nav align-items-center gap-3">
+
+          {% if not current_user.is_authenticated %}
+
+          <li class="nav-item">
+
+            <a class="btn btn-outline-primary btn-sm" href="{{ url_for('auth.login') }}">Login</a>
+
+          </li>
+
+          <li class="nav-item">
+
+            <a class="btn btn-primary btn-sm" href="{{ url_for('auth.register') }}">Join Now</a>
+
+          </li>
+
+          {% else %}
+
+          <li class="nav-item dropdown">
+
+            <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown">
+
+              <div class="position-relative">
+
+                <img src="{{ user_pic or 'https://img.freepik.com/free-psd/contact-icon-illustration-isolated_23-2151903337.jpg' }}"
+
+                  alt="Profile" class="rounded-circle border border-2 border-primary" width="38" height="38" style="object-fit: cover" />
+
+                <span class="position-absolute bottom-0 end-0 bg-success rounded-circle border border-dark" style="width: 10px; height: 10px"></span>
+
+              </div>
+
+            </a>
+
+            <ul class="dropdown-menu dropdown-menu-end animate slideIn">
+
+              <li class="px-4 py-3">
+
+                <div class="d-flex align-items-center gap-3">
+
+                  <img src="{{ user_pic or 'https://img.freepik.com/free-psd/contact-icon-illustration-isolated_23-2151903337.jpg' }}"
+
+                    alt="Profile" class="rounded-circle" width="45" height="45" style="object-fit: cover" />
+
+                  <div>
+
+                    <h6 class="mb-0 text-white font-bold">{{ current_user.username }}</h6>
+
+                    <small class="text-muted">{{ current_user.email }}</small>
+
+                  </div>
+
+                </div>
+
+              </li>
+
+              <li><hr class="dropdown-divider" /></li>
+
+              <li><a class="dropdown-item" href="{{ url_for('auth.dashboard') }}"><i class="fas fa-user-circle me-2"></i> Account Profile</a></li>
+
+              {% if current_user.email == 'malverohan90@gmail.com' %}
+
+              <li><a class="dropdown-item text-warning" href="{{ url_for('admin.admin_panel') }}"><i class="fas fa-shield-halved me-2"></i> Admin Panel</a></li>
+
+              {% endif %}
+
+              <li><hr class="dropdown-divider" /></li>
+
+              <li><a class="dropdown-item text-danger" href="{{ url_for('auth.logout') }}"><i class="fas fa-power-off me-2"></i> Sign Out</a></li>
+
+            </ul>
+
+          </li>
+
+          {% endif %}
+
+        </ul>
+
+      </div>
+
+    </div>
+
+  </nav>
+
+
+
+  {% include "b_f.html" %}
+
+
+
+  <main class="container py-5 min-vh-100">
+
+    {% block content %}{% endblock %}
+
+  </main>
+
+
+
+  {% include "footer.html" %}
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  {% block scripts %}{% endblock %}
+
+</body>
+
+</html>

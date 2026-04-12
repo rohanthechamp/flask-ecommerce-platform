@@ -1,0 +1,400 @@
+:root {
+  --first_color: rgb(180, 41, 74);
+  --second_color: rgb(66, 60, 51);
+  --three_color: rgb(116, 56, 195);
+  --hover_color: rgb(240, 98, 146);
+  --body_color: rgb(32, 201, 57);
+}
+
+body {
+  padding: 2px;
+  align-items: center;
+  align-content: center;
+}
+
+.background_img {
+  object-fit: cover;
+}
+.navbar {
+  /*   background-color: var(--second_color); **/
+  border-bottom: 1px;
+  padding: 15px 0;
+  list-style-type: none;
+  /*   background-color: var(--first_color); **/
+  list-style-position: inside;
+  /*   border: 2px solid; **/
+}
+/* header.masthead {
+  position: relative;
+  margin-bottom: 3rem;
+  padding-top: calc(8rem + 57px);
+  padding-bottom: 8rem;
+  background: no-repeat center center;
+  background-color: transparent;
+  background-size: cover;
+  background-attachment: scroll;
+}
+
+header.masthead:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #212529;
+  opacity: 0.5;
+}
+header.masthead .page-heading,
+header.masthead .post-heading,
+header.masthead .site-heading {
+  color: #fff;
+}
+header.masthead .page-heading,
+header.masthead .site-heading {
+  text-align: center;
+}
+header.masthead .page-heading h1,
+header.masthead .page-heading .h1,
+header.masthead .site-heading h1,
+header.masthead .site-heading .h1 {
+  font-size: 3rem;
+}
+header.masthead .page-heading .subheading,
+header.masthead .site-heading .subheading {
+  font-size: 1.5rem;
+  font-weight: 300;
+  line-height: 1.1;
+  display: block;
+  margin-top: 0.625rem;
+  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+header.masthead .post-heading h1,
+header.masthead .post-heading .h1 {
+  font-size: 2.25rem;
+}
+header.masthead .post-heading .meta,
+header.masthead .post-heading .subheading {
+  line-height: 1.1;
+  display: block;
+}
+header.masthead .post-heading .subheading {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0.75rem 0 2rem;
+  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+header.masthead .post-heading .meta {
+  font-size: 1.25rem;
+  font-weight: 300;
+  font-style: italic;
+  font-family: "Lora", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
+}
+header.masthead .post-heading .meta a {
+  color: #fff;
+}
+@media (min-width: 992px) {
+  header.masthead {
+    padding-top: 12.5rem;
+    padding-bottom: 12.5rem;
+  }
+  header.masthead .page-heading h1,
+  header.masthead .page-heading .h1,
+  header.masthead .site-heading h1,
+  header.masthead .site-heading .h1 {
+    font-size: 5rem;
+  }
+  header.masthead .post-heading h1,
+  header.masthead .post-heading .h1 {
+    font-size: 3.5rem;
+  }
+  header.masthead .post-heading .subheading {
+    font-size: 1.875rem;
+  }
+} */
+ /* Header background and layout */
+.masthead {
+  position: relative;
+  background-image: url('https://img.freepik.com/free-photo/top-view-desk-with-black-friday-gifts_23-2148288216.jpg?t=st=1739012222~exp=1739015822~hmac=7cdb53fe922b9bc867d6cc0275ccd2cc0b0f9bc63832623317fc42e370280b65&w=1060');
+  height: 450px; /* Adjust the height as needed */
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed; /* Optional: Creates a parallax effect */
+}
+
+/* The overlay darkens the header image for better text readability */
+.masthead .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5); /* Adjust opacity as needed */
+}
+
+/* Ensures the container fills the header height */
+.masthead .container {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+}
+
+h1 {
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-size: 40px;
+  background-color: rgb(55, 122, 99);
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+li {
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  font-size: small;
+  text-align: justify;
+  text-overflow: initial;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+  gap: 2px;
+  display: inline;
+  padding: 12px 30px;
+  background-color: var(--three_color);
+  border-radius: 20px;
+}
+
+li .hover {
+  background-color: var(--hover_color);
+  transform: scale(1.1);
+  box-shadow: 3px 3px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Multicolor Effect */
+li:nth-child(1) {
+  background-color: rgb(255, 99, 71);
+}
+
+/* Red */
+li:nth-child(2) {
+  background-color: rgb(30, 144, 255);
+}
+
+/* Blue */
+li:nth-child(3) {
+  background-color: rgb(50, 205, 50);
+}
+
+/* Green */
+li:nth-child(4) {
+  background-color: rgb(255, 165, 0);
+}
+
+/* Orange */
+li:nth-child(5) {
+  background-color: rgb(148, 0, 211);
+}
+
+/* Purple */
+li:nth-child(6) {
+  background-color: rgb(255, 20, 147);
+}
+/* Footer styles */
+.border-top {
+  border-top: 1px solid #e5e5e5 !important;
+}
+
+.container {
+  padding-right: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+/* Social media icons */
+.list-inline {
+  padding-left: 0;
+  list-style: none;
+}
+
+.list-inline-item {
+  display: inline-block;
+}
+
+.list-inline-item:not(:last-child) {
+  margin-right: 0.5rem;
+}
+
+.fa-stack {
+  display: inline-block;
+  height: 2em;
+  line-height: 2em;
+  position: relative;
+  vertical-align: middle;
+  width: 2.5em;
+}
+
+.fa-stack-2x {
+  font-size: 2em;
+}
+
+.fa-stack-1x {
+  font-size: 1em;
+  left: 50%;
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Text styles */
+.small {
+  font-size: 0.875em;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.text-muted {
+  color: #6c757d !important;
+}
+
+.fst-italic {
+  font-style: italic !important;
+}
+
+/* Responsive adjustments */
+@media (min-width: 992px) {
+  .container {
+    padding-right: 3rem;
+    padding-left: 3rem;
+  }
+}
+
+/* Hover effects for social icons */
+.list-inline-item a {
+  transition: all 0.3s ease;
+}
+
+.list-inline-item a:hover {
+  opacity: 0.7;
+  transform: translateY(-2px);
+}
+
+
+
+
+
+
+
+.product-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+.product-image {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.category {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.product-title {
+  font-size: 2rem;
+  margin-bottom: 16px;
+  color: #333;
+}
+
+.price-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.original-price {
+  color: #999;
+  text-decoration: line-through;
+  font-size: 1.2rem;
+}
+
+.discount-price {
+  color: #e41e31;
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.discount-tag {
+  background: #ffebee;
+  color: #e41e31;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.description {
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.add-to-cart {
+  background: #1a73e8;
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.add-to-cart:hover {
+  background: #1557b0;
+}
+
+.features {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #eee;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .product-grid {
+      grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,254 @@
+{% extends 'base.html' %}
+
+{% block title %}System Command | ChampMart Admin{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<style>
+  /* --- ADMIN DASHBOARD THEME --- */
+  .dashboard-container {
+    background: var(--bg-obsidian);
+    min-height: 100vh;
+  }
+
+  .dashboard-title {
+    font-weight: 900;
+    color: white;
+    letter-spacing: -1px;
+    text-transform: uppercase;
+  }
+
+  /* Metrics Cards */
+  .stats-card {
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 20px;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+  }
+
+  .stats-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--neon-purple) !important;
+  }
+
+  .stats-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .order-link {
+    font-size: 0.75rem;
+    text-decoration: none;
+    color: var(--neon-purple);
+    font-weight: 700;
+    transition: 0.2s;
+  }
+
+  .order-link:hover {
+    color: white;
+    text-decoration: underline;
+  }
+
+  /* Chart Containers */
+  .chart-container {
+    background: var(--bg-card) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 24px;
+    min-height: 400px;
+  }
+
+  .chart-title {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+  }
+
+  .action-btn {
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container py-5">
+  <div class="container">
+
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 gap-3">
+      <div>
+        <h1 class="dashboard-title h2 mb-1">
+          <i class="fas fa-terminal text-primary me-2"></i> System Control
+        </h1>
+        <p class="text-muted small mb-0">Hardware/Software Asset Oversight Platform</p>
+      </div>
+      <div class="d-flex gap-2">
+        <a href="{{ url_for('admin.add_item') }}" class="btn btn-primary action-btn">
+          <i class="fas fa-plus-circle me-2"></i> Deploy Asset
+        </a>
+        <button class="btn btn-outline-secondary action-btn text-white">
+          <i class="fas fa-file-export me-2"></i> Export Log
+        </button>
+      </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+      <div class="col-md-3">
+        <div class="card stats-card h-100">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <h6 class="text-muted small text-uppercase mb-2">Live Nodes</h6>
+                <h2 class="text-white fw-900 mb-0">{{ users_online|default(0) }}</h2>
+              </div>
+              <div class="stats-icon" style="background: rgba(168, 85, 247, 0.1);">
+                <i class="fas fa-satellite-dish text-primary"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="card stats-card h-100">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <h6 class="text-muted small text-uppercase mb-2">Inventory</h6>
+                <h2 class="text-white fw-900 mb-0">{{ total_products|default(0) }}</h2>
+              </div>
+              <div class="stats-icon" style="background: rgba(34, 197, 94, 0.1);">
+                <i class="fas fa-microchip text-success"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="card stats-card h-100">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <h6 class="text-muted small text-uppercase mb-2">Transactions</h6>
+                <h2 class="text-white fw-900 mb-0">{{ total_orders|default(0) }}</h2>
+                <a href="{{ url_for('admin.update_orders') }}" class="order-link mt-2 d-inline-block">VIEW LEDGER →</a>
+              </div>
+              <div class="stats-icon" style="background: rgba(59, 130, 246, 0.1);">
+                <i class="fas fa-exchange-alt text-info"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="card stats-card h-100">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <h6 class="text-muted small text-uppercase mb-2">Total Accounts</h6>
+                <h2 class="text-white fw-900 mb-0">{{ total_user_accounts|default(0) }}</h2>
+              </div>
+              <div class="stats-icon" style="background: rgba(234, 179, 8, 0.1);">
+                <i class="fas fa-fingerprint text-warning"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-8">
+        <div class="card chart-container p-4">
+          <h5 class="chart-title">Asset Deployment Trend</h5>
+          <div style="flex-grow: 1;">
+            <canvas id="productChart"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="card chart-container p-4">
+          <h5 class="chart-title">Node Activity Distro</h5>
+          <div style="flex-grow: 1;">
+            <canvas id="userActivityChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Shared Chart Defaults
+    Chart.defaults.color = '#94a3b8';
+    Chart.defaults.font.family = "'Sono', monospace";
+
+    // Line Chart
+    const productCtx = document.getElementById('productChart').getContext('2d');
+    new Chart(productCtx, {
+      type: 'line',
+      data: {
+        labels: {{ product_labels| safe }},
+    datasets: [{
+      label: 'Deployed Assets',
+      data: {{ product_data| safe }},
+    borderColor: '#a855f7',
+    backgroundColor: 'rgba(168, 85, 247, 0.1)',
+    borderWidth: 3,
+    tension: 0.4,
+    fill: true,
+    pointRadius: 0,
+    pointHoverRadius: 6
+        }]
+      },
+    options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { display: false } },
+      y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true }
+    }
+  }
+    });
+
+  // Doughnut Chart
+  const userCtx = document.getElementById('userActivityChart').getContext('2d');
+  new Chart(userCtx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Active', 'Idle', 'New'],
+      datasets: [{
+        data: [{{ users_online }}, {{ total_user_accounts - users_online }}, {{ new_users_today|default(5) }}],
+    backgroundColor: ['#a855f7', '#3b82f6', '#ec4899'],
+    borderWidth: 0,
+    hoverOffset: 20
+        }]
+      },
+    options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    cutout: '80%',
+    plugins: { legend: { position: 'bottom' } }
+  }
+    });
+  });
+</script>
+{% endblock %}

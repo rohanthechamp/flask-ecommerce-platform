@@ -1,0 +1,198 @@
+
+
+{% extends 'base.html' %} 
+
+{% block title %}Saved Items | ChampMart{% endblock %} 
+
+{% block styles %}
+{{ super() }}
+<style>
+  /* --- WISHLIST HEADER --- */
+  .vault-header {
+    margin-bottom: 3rem;
+  }
+
+  .vault-title {
+    font-weight: 900;
+    font-size: 3rem;
+    letter-spacing: -2px;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .vault-subtitle {
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.8rem;
+  }
+
+  /* --- TACTICAL WISHLIST CARDS --- */
+  .wishlist-card {
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+  }
+
+  .wishlist-card:hover {
+    border-color: var(--neon-purple);
+    transform: translateX(10px); /* Subtle "pull" effect */
+    box-shadow: -10px 0 30px rgba(168, 85, 247, 0.1);
+  }
+
+  .wishlist-img-box {
+    background: #000;
+    border-right: 1px solid var(--glass-border);
+    height: 100%;
+    min-height: 180px;
+  }
+
+  .wishlist-img-box img {
+    opacity: 0.8;
+    transition: opacity 0.3s;
+  }
+
+  .wishlist-card:hover .wishlist-img-box img {
+    opacity: 1;
+  }
+
+  /* --- DATA FIELDS --- */
+  .item-title {
+    font-weight: 800;
+    color: white;
+    letter-spacing: -0.5px;
+  }
+
+  .price-mrp {
+    text-decoration: line-through;
+    color: var(--text-muted);
+    font-family: 'Sono', monospace;
+    font-size: 0.9rem;
+  }
+
+  .price-deal {
+    color: var(--neon-pink);
+    font-family: 'Sono', monospace;
+    font-weight: 800;
+    font-size: 1.4rem;
+  }
+
+  /* --- ACTION BUTTONS --- */
+  .btn-remove {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border-radius: 100px;
+    transition: all 0.2s;
+  }
+
+  .btn-remove:hover {
+    background: #ef4444;
+    color: white;
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+  }
+
+  /* --- EMPTY STATE --- */
+  .empty-vault {
+    text-align: center;
+    padding: 100px 20px;
+    background: var(--bg-card);
+    border: 1px dashed var(--glass-border);
+    border-radius: 40px;
+  }
+
+  .empty-icon {
+    font-size: 4rem;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1.5rem;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+  <div class="vault-header">
+    <p class="vault-subtitle">Personal Intelligence</p>
+    <h1 class="vault-title">Saved Collection</h1>
+  </div>
+
+  {% if user_wishlist_items %}
+  <div class="row">
+    <div class="col-lg-10 col-xl-8">
+      {% for item in user_wishlist_items %}
+      <div class="card wishlist-card mb-4">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <div class="wishlist-img-box">
+              <img
+                src="{{ item.product.product_img_url or url_for('static', filename='assets/img/default_p.png') }}"
+                class="img-fluid h-100 w-100 object-fit-cover"
+                alt="{{ item.product.product_name }}"
+              />
+            </div>
+          </div>
+          
+          <div class="col-md-8">
+            <div class="card-body p-4 d-flex flex-column justify-content-center h-100">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h2 class="item-title h4 mb-0">
+                  {{ item.product.product_name }}
+                </h2>
+                <span class="badge bg-dark border border-secondary text-muted">ID: #{{ item.product.id }}</span>
+              </div>
+
+              <div class="mb-4">
+                <span class="price-mrp me-3">₹{{ item.product.mrp_product_price }}</span>
+                <span class="price-deal">₹{{ item.product.discount_product_price }}</span>
+              </div>
+
+              <div class="d-flex align-items-center gap-3">
+                <a href="{{ url_for('main.show_item', item_id=item.product.id) }}" class="btn btn-primary btn-sm">
+                  <i class="fas fa-shopping-cart me-2"></i> Move to Cart
+                </a>
+                
+                <form
+                  action="{{ url_for('main.remove_from_wishlist', item_id=item.product.id) }}"
+                  method="post"
+                  class="m-0"
+                >
+                  <button type="submit" class="btn btn-remove">
+                    <i class="fas fa-trash-alt me-1"></i> Delete
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  {% else %}
+  <div class="empty-vault shadow-lg">
+    <div class="empty-icon">
+      <i class="fas fa-box-open"></i>
+    </div>
+    <h2 class="text-white fw-bold">The Vault is Empty</h2>
+    <p class="text-muted mb-4">No tactical gear has been saved yet. Explore the market to add items.</p>
+    <a href="{{ url_for('main.get_all_items') }}" class="btn btn-primary btn-lg px-5">
+      <i class="fas fa-search me-2"></i> Back to Market
+    </a>
+  </div>
+  {% endif %} 
+</div>
+
+{% endblock %}

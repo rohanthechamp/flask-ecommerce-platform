@@ -1,0 +1,65 @@
+
+{% extends 'base.html' %}
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/register_login.css') }}">
+{% endblock %}
+{% from "bootstrap5/form.html" import render_form %}
+
+{% block title %}Log In{% endblock %}
+
+{% block content %}
+<header class="masthead">
+  <div class="container position-relative">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="text-center text-white">
+          <img src="{{  url_for('static', filename='assets/img/google.png') }}" alt="Logo" class="mb-3"
+            style="max-width: 50px;">
+          <h1>Log In</h1>
+          <p class="lead">Welcome back! Please sign in to continue.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="mb-4">
+  <div class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category if category != 'message' else 'info' }} alert-dismissible fade show"
+      role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <div class="row justify-content-center">
+      <div class="col-lg-6">
+        <div class="card">
+          <div class="card-body">
+            {{ form.hidden_tag() }}
+            {{ csrf_token }}
+            {{ render_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+
+            <hr>
+            <div class="text-center">
+              <a href="{{ url_for('auth.login_google') }}" class="btn btn-danger mb-2">
+                <i class="fab fa-google me-2"></i> Log in with Google
+              </a>
+              <br>
+              <a href="{{ url_for('auth.register') }}" class="btn btn-success">
+                <i class="fas fa-user-plus me-2"></i> New Customer? Register
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
