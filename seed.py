@@ -1,5 +1,5 @@
 import os
-from flask import Blueprint, abort
+from flask import Blueprint, abort,redirect,request
 from models import ProductInformation
 from extensions import db
 from seed_products import Seeder  # your class we created
@@ -8,13 +8,14 @@ from auth import admin_only
 seed_bp = Blueprint("seed", __name__)
 
 
-@seed_bp.route("/seed/<key>", methods=["GET"])
+@seed_bp.route("/seed", methods=["GET","POST"])
 @admin_only
-def seed_data(key):
-
+def seed_data():
+    print("Entered in  Already seeded. Skipping.")
     # prevent duplicate seeding
     if ProductInformation.query.count() >= 50:
-        return "Already seeded. Skipping."
+        print("Already seeded. Skipping.")
+        return redirect(request.referrer)
 
     Seeder.run()
 

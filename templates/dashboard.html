@@ -150,9 +150,9 @@
               </div>
 
               <div class="d-flex flex-wrap gap-3">
-                {% if current_user.id == 1 %}
+                {% if current_user.id == 1 and current_user.email.strip().lower() ==  "rohanmalve810@gmail.com" %}
                 <a href="{{ url_for('admin.admin_panel') }}" class="btn btn-warning btn-action">
-                  <i class="fas fa-tools me-2"></i> Admin Panel
+                  <i class="fas fa-tools me-2"></i> Admin Panelj
                 </a>
                 {% else %}
                 <a href="{{ url_for('main.get_all_items') }}" class="btn btn-primary btn-action">

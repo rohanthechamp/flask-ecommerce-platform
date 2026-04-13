@@ -62,7 +62,7 @@ def get_active_sessions(minutes: int = 5) -> int:
     except Exception as e:
         return 0
 
-@admin_bp.route("/admin_panel")
+@admin_bp.route("/admin_panel", methods=["GET","POST"])
 @admin_only
 def admin_panel():
     users_online = get_active_sessions()

@@ -31,7 +31,7 @@ def admin_only(f):
     @wraps(f)
     @login_required
     def decorated_function(*args, **kwargs):
-        if not current_user.is_authenticated or current_user.email.strip().lower() != "malverohan90@gmail.com":
+        if not current_user.is_authenticated or  current_user.email.strip().lower() !=  "rohanmalve810@gmail.com":
             flash("You do not have permission to view that page.", "danger")
             return redirect(url_for('main.home_page'))
         return f(*args, **kwargs)

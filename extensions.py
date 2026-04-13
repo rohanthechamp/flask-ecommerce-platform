@@ -13,9 +13,9 @@ db = SQLAlchemy()
 login_manager = LoginManager()
 
 # Setup LoginManager defaults
-login_manager.login_view = 'auth.login'
-login_manager.login_message = 'Please log in to access this page.'
-login_manager.login_message_category = 'warning'
+login_manager.login_view = "auth.login"
+login_manager.login_message = "Please log in to access this page."
+login_manager.login_message_category = "warning"
 
 cache = Cache()
 oauth = OAuth()
@@ -29,5 +29,5 @@ redis_client = redis.Redis(
     host=CACHE_REDIS_HOST,
     port=CACHE_REDIS_PORT,
     db=CACHE_REDIS_DB,
-    decode_responses=True
+    decode_responses=True,
 )
