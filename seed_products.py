@@ -1,5 +1,5 @@
 import random
-from server import app, db
+from extensions import app, db
 from models import ProductInformation
 
 CATEGORIES = ["Electronics", "Clothing", "Home & Kitchen", "Books", "Sports"]

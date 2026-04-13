@@ -1,8 +1,6 @@
 from datetime import datetime
 import pytz
 from enum import Enum
-
-# Cafe
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import Integer, String, ForeignKey, Float, Boolean
 from flask_login import UserMixin

@@ -6,6 +6,7 @@ from extensions import db, login_manager, cache, oauth, migrate
 from auth import auth_bp
 from admin import admin_bp
 from main import main_bp
+from seed import seed_bp
 
 # Function to create the database tables
 def create_database(app):
@@ -49,7 +50,8 @@ def create_app():
     # Register blueprints
     app.register_blueprint(main_bp)      # e.g. /get_all_items -> url_for('main.get_all_items')
     app.register_blueprint(auth_bp)      # e.g. /login -> url_for('auth.login')
-    app.register_blueprint(admin_bp)     # e.g. /admin_panel -> url_for('admin.admin_panel')
+    app.register_blueprint(admin_bp)  
+    app.register_blueprint(seed_bp)     # e.g. /admin_panel -> url_for('admin.admin_panel')
 
     # Ensure Database structures exist
     create_database(app)
