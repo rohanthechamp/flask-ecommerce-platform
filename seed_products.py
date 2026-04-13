@@ -1,5 +1,5 @@
 import random
-from extensions import app, db
+from server import app, db
 from models import ProductInformation
 
 CATEGORIES = ["Electronics", "Clothing", "Home & Kitchen", "Books", "Sports"]
@@ -23,13 +23,4 @@ def generate_products():
 
 if __name__ == "__main__":
     with app.app_context():
-        # Check if products already exist to prevent duplicate seeding
-        if ProductInformation.query.count() < 50:
-            print("Seeding 50 products into the database...")
-            for p_data in generate_products():
-                product = ProductInformation(**p_data)
-                db.session.add(product)
-            db.session.commit()
-            print("Successfully inserted 50 dummy products!")
-        else:
-            print("Products already exist in the database. Skipping seed to prevent duplicates.")
+        Seeder.run()

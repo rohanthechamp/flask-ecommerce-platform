@@ -1,4 +1,8 @@
 # 🛒 Flask E-Commerce Platform
+## 🌐 Live Demo
+[![Live Demo](https://img.shields.io/badge/Live-Demo-green)](https://flask-ecommerce-platform-il6s.onrender.com) -https://flask-ecommerce-platform-il6s.onrender.com
+
+⚠️ Note: Free hosting may take ~30-60 seconds to wake up.
 
 Flask-based full-stack eCommerce application with authentication, Stripe payments, admin dashboard, and order management.
 
