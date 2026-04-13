@@ -1,6 +1,6 @@
 import random
 import uuid
-# from app import app
+
 from extensions import db
 from models import (
     ProductInformation,

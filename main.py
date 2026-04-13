@@ -64,10 +64,10 @@ def remove_user_item(item_to_remove, location_name):
         flash(f"An error occurred while removing item from {location_name}", "error")
         return False
 
-
 @main_bp.context_processor
 def base():
     form = SearchProduct()
+
     try:
         list_of_category_tuples = (
             db.session.query(ProductInformation.product_category).distinct().all()
@@ -79,13 +79,20 @@ def base():
     user_cart_items = []
     subtotal_price = 0
     total_price = 0
+
     if current_user.is_authenticated:
         user_cart_items = get_all_current_user_database_item(
             CartDatabase, current_user.get_id()
         )
+
         for cart_item in user_cart_items:
             subtotal_price += cart_item.product.mrp_product_price * cart_item.quantity
             total_price += cart_item.product.discount_product_price * cart_item.quantity
+
+    # 🔥 ADD THIS (IMPORTANT)
+    gst = round(total_price * 0.18, 2)
+    savings = round(subtotal_price - total_price, 2)
+    final_price = round(total_price + gst, 2)
 
     user_pic = session.get("user_pic")
 
@@ -94,6 +101,9 @@ def base():
         list_of_category=list_of_category,
         subtotal_price=round(subtotal_price, 2),
         total_price=round(total_price, 2),
+        gst=gst,
+        savings=savings,
+        final_price=final_price,
         user_cart_items=user_cart_items,
         user_pic=user_pic,
     )
@@ -212,6 +222,7 @@ def wishlist_page():
     )
     return render_template("wishlist.html", user_wishlist_items=user_wishlist_items)
 
+
 @main_bp.route("/add_products_wishlist/<int:item_id>", methods=["GET"])
 @login_required
 def add_products_wishlist(item_id):
@@ -219,8 +230,7 @@ def add_products_wishlist(item_id):
 
     # 🔍 Check if already in wishlist
     existing_item = WishList.query.filter_by(
-        customer_id=current_user.id,
-        product_id=product.id
+        customer_id=current_user.id, product_id=product.id
     ).first()
 
     if existing_item:
@@ -229,9 +239,7 @@ def add_products_wishlist(item_id):
 
     # ✅ Add to wishlist
     wishlist_item = WishList(
-        in_wishlist=True,
-        customer_id=current_user.id,
-        product_id=product.id
+        in_wishlist=True, customer_id=current_user.id, product_id=product.id
     )
 
     db.session.add(wishlist_item)

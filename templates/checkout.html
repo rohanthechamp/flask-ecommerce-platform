@@ -188,47 +188,59 @@
 
         </div>
 
-        <div class="col-lg-4">
-          <div class="summary-sidebar">
-            <div class="section-label">03. Final Audit</div>
-            <div class="checkout-card p-4">
-              
-              <div class="price-row">
-                <span class="text-muted">Subtotal (NET)</span>
-                <span class="text-white">₹{{ subtotal_price }}</span>
-              </div>
-              <div class="price-row">
-                <span class="text-muted">System Tax (18% GST)</span>
-                <span class="text-white">₹{{ (total_price * 0.18) | round(2) }}</span>
-              </div>
-              <div class="price-row text-success">
-                <span class="fw-bold">Efficiency Savings</span>
-                <span class="fw-bold">-₹{{ ((subtotal_price - total_price)) | round(2) }}</span>
-              </div>
+      <div class="col-lg-4">
+  <div class="summary-sidebar">
+    <div class="section-label">03. Final Audit</div>
 
-              <div class="final-amount-box text-center">
-                <div class="text-muted small text-uppercase letter-spacing-1 mb-1">Total Payable</div>
-                <div class="h2 fw-900 text-white mb-0">₹{{ (total_price + (total_price * 0.18)) | round(2) }}</div>
-              </div>
+    <div class="checkout-card p-4 shadow-lg rounded-4">
 
-              <button type="submit" class="btn btn-primary btn-execute w-100">
-                <i class="fas fa-shield-alt me-2"></i> Confirm & Pay
-              </button>
+      <div class="price-row d-flex justify-content-between mb-2">
+        <span class="text-muted">Subtotal (MRP)</span>
+        <span class="text-white fw-semibold">₹{{ subtotal_price }}</span>
+      </div>
 
-              <div class="mt-4 text-center">
-                <div class="d-flex justify-content-center align-items-center gap-3 opacity-50">
-                   <img src="https://cdn-icons-png.flaticon.com/512/349/349221.png" width="35" alt="Visa">
-                   <img src="https://cdn-icons-png.flaticon.com/512/196/196054.png" width="35" alt="Mastercard">
-                   <img src="https://cdn-icons-png.flaticon.com/512/5968/5968299.png" width="35" alt="Stripe">
-                </div>
-                <p class="x-small text-muted mt-3 mb-0" style="font-size: 0.7rem;">
-                  <i class="fas fa-lock text-success me-1"></i> SSL 256-bit Encrypted Transaction
-                </p>
-              </div>
+      <div class="price-row d-flex justify-content-between mb-2">
+        <span class="text-muted">Discounted Total</span>
+        <span class="text-white fw-semibold">₹{{ total_price }}</span>
+      </div>
 
-            </div>
-          </div>
+      <div class="price-row d-flex justify-content-between mb-2">
+        <span class="text-muted">GST (18%)</span>
+        <span class="text-warning fw-semibold">₹{{ gst }}</span>
+      </div>
+
+      <div class="price-row d-flex justify-content-between text-success mb-3">
+        <span class="fw-bold">You Saved</span>
+        <span class="fw-bold">-₹{{ savings }}</span>
+      </div>
+
+      <hr class="border-secondary">
+
+      <div class="final-amount-box text-center my-3">
+        <div class="text-muted small text-uppercase mb-1">Total Payable</div>
+        <div class="h2 fw-bold text-white">₹{{ final_price }}</div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-lg w-100 mt-2">
+        <i class="fas fa-lock me-2"></i> Secure Checkout
+      </button>
+
+      <div class="mt-4 text-center">
+        <div class="d-flex justify-content-center gap-3 opacity-75">
+          <img src="https://cdn-icons-png.flaticon.com/512/349/349221.png" width="35">
+          <img src="https://cdn-icons-png.flaticon.com/512/196/196054.png" width="35">
+          <img src="https://cdn-icons-png.flaticon.com/512/5968/5968299.png" width="35">
         </div>
+
+        <p class="small text-muted mt-2">
+          <i class="fas fa-lock text-success me-1"></i>
+          256-bit secure encrypted payment
+        </p>
+      </div>
+
+    </div>
+  </div>
+</div>
       </div>
     </form>
     {% else %}

@@ -167,45 +167,57 @@
         {% endfor %}
       </div>
 
-      <div class="col-lg-4">
-        <div class="summary-glass">
-          <h3 class="h5 text-white fw-bold mb-4">Audit Summary</h3>
-          
-          <div class="price-row">
-            <span class="text-muted">Total Units</span>
-            <span class="text-white">{{ cart_items|length }}</span>
-          </div>
-          <div class="price-row">
-            <span class="text-muted">Net Value</span>
-            <span class="text-white">₹{{ subtotal_price }}</span>
-          </div>
-          <div class="price-row">
-            <span class="text-muted">Tax (18% GST)</span>
-            <span class="text-white">₹{{ (total_price * 0.18) | round(2) }}</span>
-          </div>
+    <div class="col-lg-4">
+  <div class="summary-glass p-4 shadow-lg rounded-4">
 
-          <div class="price-row text-success">
-            <span class="fw-bold">Discount Applied</span>
-            <span class="fw-bold">-₹{{ (subtotal_price - total_price) | round(2) }}</span>
-          </div>
+    <h3 class="h5 text-white fw-bold mb-4">Audit Summary</h3>
 
-          <div class="total-divider"></div>
+    <div class="price-row d-flex justify-content-between mb-2">
+      <span class="text-muted">Total Items</span>
+      <span class="text-white fw-semibold">{{ user_cart_items|length }}</span>
+    </div>
 
-          <div class="mb-4">
-            <span class="text-muted small text-uppercase">Final Commitment</span>
-            <div class="final-price">₹{{ (total_price + (total_price * 0.18)) | round(2) }}</div>
-          </div>
+    <div class="price-row d-flex justify-content-between mb-2">
+      <span class="text-muted">MRP Total</span>
+      <span class="text-white fw-semibold">₹{{ subtotal_price }}</span>
+    </div>
 
-          <div class="d-grid gap-3">
-            <a href="{{ url_for('main.checkout_page')}}" class="btn btn-primary btn-action shadow-lg">
-              <i class="fas fa-shield-alt me-2"></i> Proceed to Checkout
-            </a>
-            <a href="{{ url_for('main.remove_all_items_from_cart')}}" class="btn btn-outline-danger btn-action">
-              <i class="fas fa-broom me-2"></i> Purge Buffer
-            </a>
-          </div>
-        </div>
-      </div>
+    <div class="price-row d-flex justify-content-between mb-2">
+      <span class="text-muted">Discounted Total</span>
+      <span class="text-white fw-semibold">₹{{ total_price }}</span>
+    </div>
+
+    <div class="price-row d-flex justify-content-between mb-2">
+      <span class="text-muted">GST (18%)</span>
+      <span class="text-warning fw-semibold">₹{{ gst }}</span>
+    </div>
+
+    <div class="price-row d-flex justify-content-between text-success mb-3">
+      <span class="fw-bold">You Saved</span>
+      <span class="fw-bold">-₹{{ savings }}</span>
+    </div>
+
+    <hr class="border-secondary">
+
+    <div class="mb-4 text-center">
+      <span class="text-muted small text-uppercase">Final Amount</span>
+      <div class="final-price fs-3 fw-bold text-white">₹{{ final_price }}</div>
+    </div>
+
+    <div class="d-grid gap-3">
+      <a href="{{ url_for('main.checkout_page')}}" 
+         class="btn btn-primary btn-lg shadow">
+        <i class="fas fa-lock me-2"></i> Proceed to Checkout
+      </a>
+
+      <a href="{{ url_for('main.remove_all_items_from_cart')}}" 
+         class="btn btn-outline-danger">
+        <i class="fas fa-trash me-2"></i> Clear Cart
+      </a>
+    </div>
+
+  </div>
+</div>
     </div>
     {% else %}
     <div class="text-center py-5">
