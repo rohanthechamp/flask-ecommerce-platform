@@ -21,12 +21,20 @@ def create_app():
     app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
     app.config["WTF_CSRF_ENABLED"] = True
     app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
-    
-    # Cache Config
-    app.config["CACHE_TYPE"] = "RedisCache"
-    app.config["CACHE_REDIS_HOST"] = os.getenv("CACHE_REDIS_HOST")
-    app.config["CACHE_REDIS_PORT"] = int(os.getenv("CACHE_REDIS_PORT"))
-    app.config["CACHE_REDIS_DB"] = int(os.getenv("CACHE_REDIS_DB"))
+
+
+    redis_url = os.getenv("REDIS_URL")
+
+    if redis_url:
+        # ✅ PRODUCTION (Render)
+        app.config["CACHE_TYPE"] = "RedisCache"
+        app.config["CACHE_REDIS_URL"] = redis_url
+    else:
+        # ✅ LOCAL (fallback)
+        app.config["CACHE_TYPE"] = "RedisCache"
+        app.config["CACHE_REDIS_HOST"] = "localhost"
+        app.config["CACHE_REDIS_PORT"] = 6379
+        app.config["CACHE_REDIS_DB"] = 0
 
     # Initialize extensions
     Bootstrap5(app)
