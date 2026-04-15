@@ -46,7 +46,7 @@ class UserDatabase(UserMixin, db.Model):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     email: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
-    password: Mapped[str] = mapped_column(String(100), nullable=True)
+    password: Mapped[str] = mapped_column(String(255), nullable=True)
     name: Mapped[str] = mapped_column(String(100), nullable=False)
     is_oauth_user: Mapped[bool] = mapped_column(Boolean, default=False)  # New field
 

@@ -223,7 +223,7 @@ def wishlist_page():
     return render_template("wishlist.html", user_wishlist_items=user_wishlist_items)
 
 
-@main_bp.route("/add_products_wishlist/<int:item_id>", methods=["GET"])
+@main_bp.route("/add_products_wishlist/<int:item_id>", methods=["GET","POST"])
 @login_required
 def add_products_wishlist(item_id):
     product = db.get_or_404(ProductInformation, item_id)
