@@ -9,6 +9,7 @@ from flask import (
     jsonify,
     abort,
 )
+from flask_sqlalchemy.model import Model
 from sqlalchemy.exc import SQLAlchemyError, DatabaseError
 from flask_login import login_required, current_user
 from sqlalchemy.orm import joinedload
@@ -63,6 +64,7 @@ def remove_user_item(item_to_remove, location_name):
         db.session.rollback()
         flash(f"An error occurred while removing item from {location_name}", "error")
         return False
+
 
 @main_bp.context_processor
 def base():
@@ -138,10 +140,9 @@ def show_item(item_id):
     requested_item = db.get_or_404(ProductInformation, item_id)
     in_wishlist_check = False
     if current_user.is_authenticated:
-        existing_item = WishList.query.filter_by(
-            customer_id=current_user.get_id(), product_id=item_id
-        ).first()
-        in_wishlist_check = existing_item is not None
+        existing_item_w = get_current_user_cart_items(WishList, current_user.get_id(), item_id)
+        in_wishlist_check = existing_item_w is not None
+
     return render_template(
         "product_details.html",
         item_data=requested_item,
@@ -188,6 +189,9 @@ def add_to_cart(item_id):
     if existing_item:
         existing_item.quantity += 1
     else:
+        wishlist_item = get_current_user_cart_items(WishList, current_user.get_id(), item_id)
+        if wishlist_item:
+            db.session.delete(wishlist_item)
         adding_to_cart = CartDatabase(
             quantity=1,
             customer_id=current_user.get_id(),
@@ -223,17 +227,25 @@ def wishlist_page():
     return render_template("wishlist.html", user_wishlist_items=user_wishlist_items)
 
 
-@main_bp.route("/add_products_wishlist/<int:item_id>", methods=["GET","POST"])
+@main_bp.route("/add_products_wishlist/<int:item_id>", methods=["GET", "POST"])
 @login_required
 def add_products_wishlist(item_id):
     product = db.get_or_404(ProductInformation, item_id)
 
+    existing_item_in_cart = get_current_user_cart_items(
+        CartDatabase, current_user.get_id(), item_id=product.id
+    )
+
+    if existing_item_in_cart:
+        flash("Already in Cart", "info")
+        return redirect(request.referrer)
+
     # 🔍 Check if already in wishlist
-    existing_item = WishList.query.filter_by(
+    existing_item_in_wishlist = WishList.query.filter_by(
         customer_id=current_user.id, product_id=product.id
     ).first()
 
-    if existing_item:
+    if existing_item_in_wishlist:
         flash("Already in wishlist", "info")
         return redirect(request.referrer)
 
