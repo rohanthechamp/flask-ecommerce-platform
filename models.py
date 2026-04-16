@@ -7,7 +7,7 @@ from flask_login import UserMixin
 from extensions import db
 from sqlalchemy import Enum as SQLEnum
 
-
+from extensions import db
 class ProductInformation(db.Model):
     __tablename__ = "product_information"
 

@@ -182,7 +182,7 @@
     <div class="product-grid mb-5">
       <div class="image-section">
         <img src="{{ item_data.product_img_url or url_for('static', filename='assets/img/default_p.png') }}"
-             alt="{{ item_data.product_name }}" class="product-image">
+             alt="{{ item_data.product_name }}" class="product-image"  loading="lazy" >
       </div>
 
       <div class="product-info d-flex flex-column justify-content-center">

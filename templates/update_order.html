@@ -154,7 +154,7 @@
           <td class="ps-4">
             <div class="d-flex align-items-center gap-3">
               <img src="{{ item.product.product_img_url or url_for('static', filename='assets/img/default_p.png') }}"
-                  class="rounded-3 border border-secondary" width="45" height="45" style="object-fit: cover;">
+      loading="lazy"             class="rounded-3 border border-secondary" width="45" height="45" style="object-fit: cover;">
               <div>
                 <h6 class="mb-0 text-white">{{ item.product.product_name }}</h6>
                 <span class="text-muted x-small">SKU: {{ item.product.id }}</span>

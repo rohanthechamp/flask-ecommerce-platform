@@ -118,7 +118,7 @@
           <div class="row g-0 align-items-center">
             <div class="col-4 col-md-3">
               <img src="{{ item.product.product_img_url or url_for('static', filename='assets/img/default_p.png') }}"
-                   class="img-fluid object-fit-cover w-100" style="height: 160px;" alt="{{ item.product.product_name }}">
+                 loading="lazy"   class="img-fluid object-fit-cover w-100" style="height: 160px;" alt="{{ item.product.product_name }}">
             </div>
             <div class="col-8 col-md-9">
               <div class="card-body p-4">
