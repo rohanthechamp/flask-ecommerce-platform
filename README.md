@@ -47,3 +47,8 @@ pip install -r requirements.txt
 
 # run the app
 python app.py
+
+```
+## 📄 License
+
+Open-source and available under the MIT License.
